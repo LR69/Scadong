@@ -1,6 +1,8 @@
 #""" --- DEFINITION DE LA SUPER CLASSE SON --- """
 # Version : 06b
-# modficition du 10-08-17 : utilisation boucles for pour déterminer si un son créé est conforme
+# modficition du 10-08-17 : utilisation boucles for pour déterminer si un son créé est conforme.
+# modficition du 11-08-17 : Ajout d'une exception permettant d'éviter d'avoir deux noms de sons identiques
+
 
 
 class Son:
