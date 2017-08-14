@@ -1,3 +1,4 @@
+# coucou ! 
 #""" --- DEFINITION DE LA SUPER CLASSE SON --- """
 # Version : 06b
 # modficition du 10-08-17 : utilisation boucles for pour déterminer si un son créé est conforme.
