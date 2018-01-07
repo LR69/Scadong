@@ -5,6 +5,7 @@ init,1C,nc,or,nc
 1A,2A,test_condition2,or,nc
 1A,2B,nc,or,nc
 1A,2C,nc,or,nc
+1A,1A,test_condition3,or,nc
 1B,2A,test_condition2,or,nc
 1B,2B,nc,or,nc
 1B,2C,nc,or,nc

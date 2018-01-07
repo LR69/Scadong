@@ -13,6 +13,9 @@ class App():
     def __init__(self):
         self.root = Tk()
         self.root.title('Scadong')
+        # Serveur Scadong
+        self.hote = "192.168.1.102"
+        self.port = 49147 #ding
         # Création d'un widget Canvas (zone graphique)
         self.photo = PhotoImage(file="grafcet.gif")
         self.Canevas = Canvas(self.root,width = 665, height =610)
@@ -79,8 +82,6 @@ class App():
         self.BoutonStop.pack(side = LEFT, padx = 10, pady = 10)
         self.BoutonStop.configure(state = DISABLED)
         #Définition du serveur
-        self.hote = "localhost"# "172.17.231.69"
-        self.port = 49147 #ding
         print("point 1") # pour debug
         time.sleep(0.1) # pour debug
         self.connexion_avec_serveur = socket.socket(socket.AF_INET,socket.SOCK_STREAM)

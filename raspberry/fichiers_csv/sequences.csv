@@ -1,4 +1,4 @@
-nom séquence,taille du pas,longueur séquence,nombre de boucle séquence(-1 = inf),trig,temps du trig (en pas),volume (vélocité),filtre,chance de jeu (entre 0 et 100),départ vers effet A,départ vers effet B,départ vers effet C,départ vers effet D,départ vers effet E,départ vers effet F,départ vers effet G,départ vers effet H
+nom sÃ©quence,taille du pas,longueur sÃ©quence,nombre de boucle sÃ©quence(-1 = inf),trig,temps du trig (en pas),volume (vÃ©locitÃ©),filtre,chance de jeu (entre 0 et 100),dÃ©part vers effet A,dÃ©part vers effet B,dÃ©part vers effet C,dÃ©part vers effet D,dÃ©part vers effet E,dÃ©part vers effet F,dÃ©part vers effet G,dÃ©part vers effet H
 rythme_hiphop_simple,1,16,-1,1,1,100,GC_filtre,100,0,0,0,0,0,0,0,0
 rythme_hiphop_simple,1,16,-1,2,11,85,GC_filtre,50,0,0,0,0,0,0,0,0
 rythme_hiphop_simple,1,16,-1,3,3,75,GC_filtre,25,0,0,0,0,0,0,0,0

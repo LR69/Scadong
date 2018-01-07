@@ -10,7 +10,7 @@ import random
 import time
 from math import *
 from filtres import *
-from pynput import keyboard
+#from pynput import keyboard
 from multiprocessing import Process, Queue
 import Serveur_Scadong # AJR
 
@@ -256,4 +256,3 @@ if __name__ == "__main__":
         pfournisseur.join()
         pinstrumentiste.join()
         pserveur.join(3)
-

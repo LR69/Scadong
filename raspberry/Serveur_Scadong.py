@@ -55,7 +55,7 @@ class Serveur_Scadong:
                     msg_recu = client.recv(1024)
                     # Peut planter si le message contient des caractèresspéciaux
                     msg_recu = msg_recu.decode()
-                    print("Reçu {}".format(msg_recu))
+                    #print("Reçu {}".format(msg_recu))#pour debug
                     if msg_recu == "etape":
                         try:
                                 while self.q_etape.empty()==False: #pour disposer de la dernière info

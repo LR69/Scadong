@@ -1,4 +1,4 @@
-nom de recette,filtre,séquence,départ séquence,type de lecture,nbre de canal de lecture max,départ vers effet A,départ vers effet B,départ vers effet C,départ vers effet D,départ vers effet E,départ vers effet F,départ vers effet G,départ vers effet H
+nom de recette,filtre,sÃ©quence,dÃ©part sÃ©quence,type de lecture,nbre de canal de lecture max,dÃ©part vers effet A,dÃ©part vers effet B,dÃ©part vers effet C,dÃ©part vers effet D,dÃ©part vers effet E,dÃ©part vers effet F,dÃ©part vers effet G,dÃ©part vers effet H
 ryth_solo,,rythme_hiphop_simple,begin,normal,20,0,0,0,0,0,0,0,0
 suite_accord,vinyle_filtre,accord_hiphop_simple,begin,normal,20,0,0,0,0,0,0,0,0
 aleatoire_ryth,,rythme_hiphop_simple,begin,random,3,0,0,0,0,0,0,0,0
