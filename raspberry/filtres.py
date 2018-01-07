@@ -1,4 +1,6 @@
-""" Module "Filtres" contenant toutes les fonctions de filtrage des sons"""
+""" Module "Filtres" contenant toutes les fonctions de filtrage des sons 
+	v1d
+"""
 
 def filtre_duree(inventaire, mini, maxi):
 	""" fonction retournant la liste des sons de l'inventaire dont la durée est comprise entre mini et maxi"""

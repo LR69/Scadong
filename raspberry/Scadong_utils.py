@@ -3,7 +3,7 @@ import csv
 def import_csv(fichier, colonnes):
 	""" importe un fichier .csv et le retourne sous forme de liste
 		Version 2 (modifiée le 29/10/17 par LR
-		"""
+		version 1d"""
 	liste=[]
 	with open(fichier,'r') as csvfile:	
 		reader = csv.DictReader(csvfile)

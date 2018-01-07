@@ -4,6 +4,7 @@
 # version 3 modifiée par LR le 31/10/17 : version utilisable en multiprocessing
 # version 4 modifiée par LR le 1/11/17 : ajout de la demande "remplissage tampon" du séquenceur.
 # version 5 modifiee par LR le 2/11/17 : ajout de time.sleep dans les boucles while
+# version 1d
 
 import pygame.mixer #calling for pygame mixer to play audio files
 import time			#calling for time to provide delays in program
