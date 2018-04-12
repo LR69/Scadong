@@ -1,4 +1,9 @@
 nom_condition,nombre_lectures_sequence_mini,bouton,seuil_camera_mini,seuil_camera_maxi,temps_attente
-test_condition1,0,2,"0,0","100,0","3,0"
-test_condition2,0,0,"50,0","60,0","8,0"
-test_condition3,0,0,0,"100,0","3,0"
+bouton1,0,1,0,100,3
+bouton2,0,2,0,100,3
+bouton3,0,3,0,100,3
+mvt_cam_bas,0,0,0,30,3
+mvt_cam_moy,0,0,30,70,3
+mvt_cam_haut,0,0,70,100,3
+10_seq,10,0,0,100,3
+toujours_vrai,0,0,0,100,0
