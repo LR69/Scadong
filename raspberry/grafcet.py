@@ -29,9 +29,9 @@ class Grafcet:
 
         IO.setwarnings(False)  #do not show any warnings
         IO.setmode(IO.BCM)     #programming the GPIO by BCM pin numbers. (like PIN29 as'GPIO5')
-        IO.setup(26, IO.IN)  #initialize GPIO26 as an input
-        IO.setup(20, IO.IN)  #initialize GPIO20 as an input
-        IO.setup(21, IO.IN)  #initialize GPIO21 as an input
+        IO.setup(16, IO.IN,pull_up_down=IO.PUD_UP)  #initialize GPIO26 as an input
+        IO.setup(20, IO.IN,pull_up_down=IO.PUD_UP)  #initialize GPIO20 as an input
+        IO.setup(21, IO.IN,pull_up_down=IO.PUD_UP)  #initialize GPIO21 as an input
         
         def __init__(self, fichier_etapes, fichier_conditions, fichier_transitions,q_et,q_rec,mode):
                 self.liste_etapes = Scadong_utils.import_csv(fichier_etapes, Grafcet.colonnes_etapes) # import csv des étapes et actions
@@ -118,7 +118,7 @@ class Grafcet:
                                         #print("appui sur la bonne touche")
                                         #Cond_Bouton=True
                                 ##########       A faire elif (element['bouton']==1 or element['bouton']==3): appui sur GPIO ###########
-                                if (IO.input(26) == 0) and (element['bouton']=="1"):
+                                if (IO.input(16) == 0) and (element['bouton']=="1"):
                                         Cond_Bouton=True
                                         print("appui sur le bouton 1 pris en compte") # pour debug
                                 elif (IO.input(20) == 0) and (element['bouton']=="2"):
@@ -134,7 +134,7 @@ class Grafcet:
                                         Cond_Camera=True
                                         #print("mouvement de la camera détecté : {} < {} < {} ".format(element['seuil_camera_mini'], mvmt, element['seuil_camera_maxi'])) # pour debug
                                 ##########       A faire : nombre de séquences #################
-                                if(IO.input(26) == 0):
+                                if(IO.input(16) == 0):
                                         print("temps écoule={} >= {} : {}".format(temps_ecoule,tempo,Cond_Tempo))
                                         print("Cond_Bouton:{}".format(Cond_Bouton))
                                         print("{} <= mouvement Camera:{} <= {} : {}".format(float(element['seuil_camera_mini']),mvmt,float(element['seuil_camera_maxi']),Cond_Camera))
