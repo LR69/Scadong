@@ -2,6 +2,7 @@
 # Mais là, vraiment, cela prendrait trop de place...
 # Pour tout renseignement contacter Anthony CLERC à thyonan1 <thyonan1@hotmail.fr>
 # 21/11/17 : ajout des communications réseau via des sockets. Scadong joue le rôle de serveur.
+# 12/04/18 : bug problèmes de pas
 import grafcet
 import sequenceur
 import Scadong_utils
