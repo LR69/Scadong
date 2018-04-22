@@ -388,6 +388,6 @@ def fluxvideo():
 </html>"""
 
 if __name__ == '__main__':
-    app.run(host='10.204.1.2')
+    app.run(host='192.168.10.254')
 
 
