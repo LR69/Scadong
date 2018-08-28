@@ -1,0 +1,9 @@
+Fichier de log du programme scadong lancé le 28/08/18 à 23:15:29, heure du raspberry concerné : Scapi1
+
+Programme lancé avec les options suivantes : 
+		- mode run :True
+		- mode camera:False
+		- loglevel:0
+La lecture des fichiers *.csv a permis d'inventorier les instruments suivants :
+['cam']
+On démarre le cycle automate à :28/08/18 23:15:29, t=1535490929.9338493
