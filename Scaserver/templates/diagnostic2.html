@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title> Scadong </title>
+		<meta Charset="utf-8" /> 
+		<!-- <link rel="stylesheet" type="text/css" href="feuille-de-styles.css"> -->
+		<link href="{{ url_for('static', filename='feuille-de-styles.css') }}" rel="stylesheet" type="text/css" />
+		<!-- <script src="jquery-3.3.1.js"></script> -->
+		<script src="{{url_for('static', filename='jquery-3.3.1.js')}}"></script>
+	</head>
+	<body>
+		<div class="simple-container" >
+			<header>
+				<h1> Scadong </h1>
+				<em> Musique distribuée </em>
+				<nav>
+					<ul>
+						<li><a href="/">Accueil</a></li>
+						<li><a href="/scapis">Scapis</a></li>
+						<li><a href="/upload">Upload</a></li>
+						<li><a href="/diagnostic">Diagnostic</a></li>
+					</ul>
+				</nav>
+
+			</header>
+			<div class="ext1">
+				<h2> Liste des instruments</h2>
+				<!--
+				<ul>
+				{% for i in Instruments_typ1 %}
+					<li> Instrument <em>{{i.nom_instrum}} </em>:  
+						<ul>
+							<li> étape en cours : <em>{{i.etape_en_cours}}</em></li>
+							<li> recette en cours: <em>{{i.recette_en_cours}}</em></li>
+							<li> séquence en cours: <em>{{i.sequence_en_cours}}</em></li>
+						</ul>
+					</li>
+				{% endfor %}
+				</ul>
+				-->
+				<form class="form-inline" method="POST" action="{{ url_for('instrument') }}">
+				  <div class="form-group">
+					<span class="input-group >
+						span class="input-group-addon"> Le Scapi suivant a été sélectionné : </span>
+							<input name="comp_field" id="exampleInput" value={{ Scapi_num }} readonly>
+					</span>
+				  </div>
+				 <button type="submit" class="btn btn-default">Go</button>
+				</form>
+			</div>
+			<ul>
+				<li>Valeur des entrées Tout ou Rien : <em>{{ scapi.ETOR }}</em></li>
+				<li>mouvement détecté par la caméra : <em>{{ scapi.mvmt }}</em></li>
+				<li>Adresse IP : <em>{{ scapi.IP_address }}</em></li>
+				<li>time : <em>{{ scapi.time }}</em></li>
+				<li>connected : <em>{{ scapi.CONNECTED }}</em></li>
+				<li>mode : <em>{{ scapi.mode }}</em></li>
+				<li>mode_acquit : <em>{{ scapi.mode_acquit }}</em></li>
+				<li>Cmde_BP : <em>{{ scapi.cmde_BP }}</em></li>
+				<li>Cmde_BP_acquit : <em>{{ scapi.cmde_BP_acquit }}</em></li>
+			</ul>
+			<footer> <em>Scadong v1H - juillet 2018 - Anthony Clerc et Laurent Roy </em> <img src="/static/CCBYSAr.png" alt="CC-BY-SA" align="right">
+			</footer>
+		</div>
+	</body>
+</html>
+

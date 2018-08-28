@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title> Scadong </title>
+		<meta Charset="utf-8" /> 
+		<!-- <link rel="stylesheet" type="text/css" href="feuille-de-styles.css"> -->
+		<link href="{{ url_for('static', filename='feuille-de-styles.css') }}" rel="stylesheet" type="text/css" />
+		<!-- <script src="jquery-3.3.1.js"></script> -->
+		<script src="{{url_for('static', filename='jquery-3.3.1.js')}}"></script>
+	</head>
+	<body>
+		<div class="simple-container" >
+			<header>
+				<h1> Scadong </h1>
+				<em> Musique distribuée </em>
+				<nav>
+					<ul>
+						<li><a href="/">Accueil</a></li>
+						<li><a href="/scapis">Scapis</a></li>
+						<li><a href="/upload">Upload</a></li>
+						<li><a href="/diagnostic">Diagnostic</a></li>
+					</ul>
+				</nav>
+
+			</header>
+			<div class="ext1">
+				<h2> Liste des Scapis</h2>
+				<ul>
+				{% for s in Scapis %}
+					<li> Scapi n°{{s.id}} :  
+						<ul>
+							<li> connecté : {{s.connected}}</li>
+							<li> mode : {{s.mode}}</li>
+						</ul>
+					</li>
+				{% endfor %}
+				</ul>
+			</div>
+			<footer> <em>Scadong v1H - juillet 2018 - Anthony Clerc et Laurent Roy </em> <img src="/static/CCBYSAr.png" alt="CC-BY-SA" align="right">
+			</footer>
+		</div>
+	</body>
+</html>
+

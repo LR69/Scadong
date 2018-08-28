@@ -1,0 +1,46 @@
+ * Serving Flask app "Interface7" (lazy loading)
+ * Environment: production
+   WARNING: Do not use the development server in a production environment.
+   Use a production WSGI server instead.
+ * Debug mode: on
+/home/test/flask_project/venv/lib/python3.4/site-packages/flask_sqlalchemy/__init__.py:794: FSADeprecationWarning: SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and will be disabled by default in the future.  Set it to True or False to suppress this warning.
+  'SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and '
+ * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+ * Restarting with stat
+/home/test/flask_project/venv/lib/python3.4/site-packages/flask_sqlalchemy/__init__.py:794: FSADeprecationWarning: SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and will be disabled by default in the future.  Set it to True or False to suppress this warning.
+  'SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and '
+ * Debugger is active!
+ * Debugger PIN: 168-064-362
+192.168.1.253 - - [20/Aug/2018 16:49:49] "GET / HTTP/1.1" 200 -
+192.168.1.253 - - [20/Aug/2018 16:49:52] "GET /upload HTTP/1.1" 200 -
+192.168.1.253 - - [20/Aug/2018 16:49:52] "GET /static/js/bootstrap.min.js HTTP/1.1" 404 -
+192.168.1.253 - - [20/Aug/2018 16:49:55] "GET /init_rpi HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/test/flask_project/venv/lib/python3.4/site-packages/flask/app.py", line 2309, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/test/flask_project/venv/lib/python3.4/site-packages/flask/app.py", line 2295, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/test/flask_project/venv/lib/python3.4/site-packages/flask/app.py", line 1741, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/test/flask_project/venv/lib/python3.4/site-packages/flask/_compat.py", line 35, in reraise
+    raise value
+  File "/home/test/flask_project/venv/lib/python3.4/site-packages/flask/app.py", line 2292, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/test/flask_project/venv/lib/python3.4/site-packages/flask/app.py", line 1815, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/test/flask_project/venv/lib/python3.4/site-packages/flask/app.py", line 1718, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/test/flask_project/venv/lib/python3.4/site-packages/flask/_compat.py", line 35, in reraise
+    raise value
+  File "/home/test/flask_project/venv/lib/python3.4/site-packages/flask/app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/test/flask_project/venv/lib/python3.4/site-packages/flask/app.py", line 1799, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/test/flask_project/Scaserver/Interface7.py", line 290, in init_rpi
+    scapi.mode = 'init'
+AttributeError: 'NoneType' object has no attribute 'mode'
+192.168.1.253 - - [20/Aug/2018 16:49:55] "GET /init_rpi?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+192.168.1.253 - - [20/Aug/2018 16:49:55] "GET /init_rpi?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1" 200 -
+192.168.1.253 - - [20/Aug/2018 16:49:55] "GET /init_rpi?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+192.168.1.253 - - [20/Aug/2018 16:49:55] "GET /init_rpi?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1" 200 -
+192.168.1.253 - - [20/Aug/2018 16:49:55] "GET /init_rpi?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -

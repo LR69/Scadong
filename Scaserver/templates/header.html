@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title> Scadong </title>
+		<meta Charset="utf-8" /> 
+		<!-- <link rel="stylesheet" type="text/css" href="feuille-de-styles.css"> -->
+		<link href="{{ url_for('static', filename='feuille-de-styles.css') }}" rel="stylesheet" type="text/css" />
+		<!-- <script src="jquery-3.3.1.js"></script> -->
+		<script src="{{url_for('static', filename='jquery-3.3.1.js')}}"></script>
+
+	</head>
+	<body>
+		<header>
+			<h1> Scadong </h1>
+			<em> Musique distribuée </em>
+			<nav>
+				<ul>
+					<li><a href="/">Accueil</a></li>
+					<li><a href="/scapis">Scapis</a></li>
+					<li><a href="/upload">Upload</a></li>
+					<li><a href="/diagnostic">Diagnostic</a></li>
+				</ul>
+			</nav>
+		</header>
+			<form class="form-inline" method="POST" action="{{ url_for('instrument') }}">
+				  <div class="form-group">
+					<span class="input-group >
+						span class="input-group-addon"> Le Scapi suivant a été sélectionné : </span>
+							<input name="comp_field" id="exampleInput" value={{ Scapi_num }} readonly>
+					</span>
+					<span class="input-group inline-block>
+						<span class="input-group-addon">L'instrument suivant a été sélectionné :</span>
+							<input name="comp_select" id="exampleInput" value={{instrum_nom}} readonly>
+					</span>
+				  </div>
+				 
+				</form>
+			<p></p>
+			<p></p>
+			<ul>
+					<li> Etape en cours : <em>{{ instrument_en_crs.etape_en_cours}}</em></li> 
+					<li> Séquence en cours : <em>{{ instrument_en_crs.sequence_en_cours}}</em></li> 
+					<li> trig : <em>{{ instrument_en_crs.trig_en_cours }}</em></li>
+					<li> filtre en cours :<em> {{ instrument_en_crs.filtre_en_cours }}</em></li>
+					<li> son en cours : <em>{{ instrument_en_crs.Son_nom }}</em> avec un volume :  <em>{{ instrument_en_crs.volume_en_cours }}</em></li>
+			</ul>

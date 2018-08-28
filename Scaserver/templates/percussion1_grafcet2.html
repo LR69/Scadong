@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title> Scadong </title>
+		<meta Charset="utf-8" /> 
+		<!-- <link rel="stylesheet" type="text/css" href="feuille-de-styles.css"> -->
+		<link href="{{ url_for('static', filename='feuille-de-styles.css') }}" rel="stylesheet" type="text/css" />
+		<!-- <script src="jquery-3.3.1.js"></script> -->
+		<script src="{{url_for('static', filename='jquery-3.3.1.js')}}"></script>
+
+	</head>
+	<body>
+		<header>
+			<h1> Scadong </h1>
+			<em> Musique distribuée </em>
+			<nav>
+				<ul>
+					<li><a href="/">Accueil</a></li>
+					<li><a href="/scapis">Scapis</a></li>
+					<li><a href="/upload">Upload</a></li>
+					<li><a href="/diagnostic">Diagnostic</a></li>
+				</ul>
+			</nav>
+		</header>
+			<form class="form-inline" method="POST" action="{{ url_for('instrument') }}">
+				  <div class="form-group">
+					<span class="input-group >
+						span class="input-group-addon"> Le Scapi suivant a été sélectionné : </span>
+							<input name="comp_field" id="exampleInput" value={{ Scapi_num }} readonly>
+					</span>
+					<span class="input-group inline-block>
+						<span class="input-group-addon">L'instrument suivant a été sélectionné :</span>
+							<input name="comp_select" id="exampleInput" value={{instrum_nom}} readonly>
+					</span>
+				  </div>
+				 
+				</form>
+			<p></p>
+			<p></p>
+			<ul>
+					<li> Etape en cours : <em>{{ instrument_en_crs.etape_en_cours}}</em></li> 
+					<li> Séquence en cours : <em>{{ instrument_en_crs.sequence_en_cours}}</em></li> 
+					<li> trig : <em>{{ instrument_en_crs.trig_en_cours }}</em></li>
+					<li> filtre en cours :<em> {{ instrument_en_crs.filtre_en_cours }}</em></li>
+					<li> son en cours : <em>{{ instrument_en_crs.Son_nom }}</em> avec un volume :  <em>{{ instrument_en_crs.volume_en_cours }}</em></li>
+			</ul>
+		<table cellspacing="0" border="0">
+			<colgroup span="23" width="85"></colgroup>
+			<tr>
+				<td height="17" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=4 align="center" bgcolor="#706b64">recette initial</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px groove #000000; border-left: 1px groove #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px groove #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px groove #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px groove #000000; border-right: 1px groove #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-left: 1px groove #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px ridge #000000; border-bottom: 1px ridge #000000; border-left: 1px ridge #000000; border-right: 1px ridge #000000" colspan=2 rowspan=2 align="left" valign=middle bgcolor="#E6E6FF">recette_nul</td>
+				<td style="border-right: 1px groove #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-left: 1px groove #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px groove #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px groove #000000; border-left: 1px groove #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px groove #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px groove #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px groove #000000; border-right: 1px groove #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000; border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td colspan=3 align="center" bgcolor="#706b64">Condition 0 &ndash; A</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td colspan=3 align="center" bgcolor="#706b64">Condition 0 &ndash; B</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td colspan=3 align="center" bgcolor="#706b64">Condition 0 &ndash; C</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">toujours_vrai</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">bouton2</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">bouton3</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px ridge #000000" align="right" bgcolor="#706b64">or</td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px ridge #000000" align="right" bgcolor="#706b64">or</td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">mvt_cam_moy</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px ridge #000000" align="right" bgcolor="#706b64">or</td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">mvt_cam_haut</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" {% if Recette_Couleur.recette == "R1A" %} bgcolor={{Recette_Couleur.couleur}} {% else %} bgcolor="#706b64" {% endif %} >Recette 1A</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" {% if Recette_Couleur.recette == "R1B" %} bgcolor={{Recette_Couleur.couleur}} {% else %} bgcolor="#706b64" {% endif %} >Recette 1B</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" {% if Recette_Couleur.recette == "R1C" %} bgcolor={{Recette_Couleur.couleur}} {% else %} bgcolor="#706b64" {% endif %} >Recette 1C</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px ridge #000000; border-bottom: 1px ridge #000000; border-left: 1px ridge #000000; border-right: 1px ridge #000000" colspan=2 rowspan=2 align="left" valign=middle bgcolor="#E6E6FF">recette_rare</td>
+				<td rowspan=2 align="left" valign=middle bgcolor="#706b64"><br></td>
+				<td rowspan=2 align="left" valign=middle bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px ridge #000000; border-bottom: 1px ridge #000000; border-left: 1px ridge #000000; border-right: 1px ridge #000000" colspan=2 rowspan=2 align="left" valign=middle bgcolor="#E6E6FF">recette_normal</td>
+				<td rowspan=2 align="left" valign=middle bgcolor="#706b64"><br></td>
+				<td rowspan=2 align="left" valign=middle bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px ridge #000000; border-bottom: 1px ridge #000000; border-left: 1px ridge #000000; border-right: 1px ridge #000000" colspan=2 rowspan=2 align="left" valign=middle bgcolor="#E6E6FF">recette_continue</td>
+				<td rowspan=2 align="left" valign=middle bgcolor="#706b64"><br></td>
+				<td rowspan=2 align="left" valign=middle bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000; border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000; border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000; border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-left: 1px solid #000000" colspan=3 align="center" bgcolor="#706b64">Condition 1 &ndash; A</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td colspan=3 align="center" bgcolor="#706b64">Condition 1 &ndash; B</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td colspan=3 align="center" bgcolor="#706b64">Condition 1 &ndash; C</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">bouton1</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">bouton2</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">bouton3</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px ridge #000000" align="right" bgcolor="#706b64">or</td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">tempo7s</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px ridge #000000" align="right" bgcolor="#706b64">or</td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">mvt_cam_moy</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px ridge #000000" align="right" bgcolor="#706b64">or</td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">mvt_cam_haut</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-left: 1px solid #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-left: 1px solid #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" {% if Recette_Couleur.recette == "R2A" %} bgcolor={{Recette_Couleur.couleur}} {% else %} bgcolor="#706b64" {% endif %} >Recette 2A</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" {% if Recette_Couleur.recette == "R2B" %} bgcolor={{Recette_Couleur.couleur}} {% else %} bgcolor="#706b64" {% endif %} >Recette 2B</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" {% if Recette_Couleur.recette == "R2C" %} bgcolor={{Recette_Couleur.couleur}} {% else %} bgcolor="#706b64" {% endif %} >Recette 2C</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px ridge #000000; border-bottom: 1px ridge #000000; border-left: 1px ridge #000000; border-right: 1px ridge #000000" colspan=2 rowspan=2 align="left" valign=middle bgcolor="#E6E6FF">recette_peu</td>
+				<td rowspan=2 align="left" valign=middle bgcolor="#706b64"><br></td>
+				<td rowspan=2 align="left" valign=middle bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px ridge #000000; border-bottom: 1px ridge #000000; border-left: 1px ridge #000000; border-right: 1px ridge #000000" colspan=2 rowspan=2 align="left" valign=middle bgcolor="#E6E6FF">recette_frequent</td>
+				<td rowspan=2 align="left" valign=middle bgcolor="#706b64"><br></td>
+				<td rowspan=2 align="left" valign=middle bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px ridge #000000; border-bottom: 1px ridge #000000; border-left: 1px ridge #000000; border-right: 1px ridge #000000" colspan=2 rowspan=2 align="left" valign=middle bgcolor="#E6E6FF">recette_continue</td>
+				<td rowspan=2 align="left" valign=middle bgcolor="#706b64"><br></td>
+				<td rowspan=2 align="left" valign=middle bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000; border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000; border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000; border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td colspan=3 align="center" bgcolor="#706b64">Condition 2 &ndash; A</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td colspan=3 align="center" bgcolor="#706b64">Condition 2 &ndash; B</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td colspan=3 align="center" bgcolor="#706b64">Condition 2 &ndash; C</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">bouton1</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">bouton2</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">bouton3</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px ridge #000000" align="right" bgcolor="#706b64">or</td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">tempo7s</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px ridge #000000" align="right" bgcolor="#706b64">or</td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">mvt_cam_moy</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px ridge #000000" align="right" bgcolor="#706b64">or</td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">mvt_cam_haut</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" {% if Recette_Couleur.recette == "R3A" %} bgcolor={{Recette_Couleur.couleur}} {% else %} bgcolor="#706b64" {% endif %} >Recette 3A</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" {% if Recette_Couleur.recette == "R3B" %} bgcolor={{Recette_Couleur.couleur}} {% else %} bgcolor="#706b64" {% endif %} >Recette 3B</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" {% if Recette_Couleur.recette == "R3C" %} bgcolor={{Recette_Couleur.couleur}} {% else %} bgcolor="#706b64" {% endif %} >Recette 3C</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px ridge #000000; border-bottom: 1px ridge #000000; border-left: 1px ridge #000000; border-right: 1px ridge #000000" colspan=2 rowspan=2 align="left" valign=middle bgcolor="#E6E6FF">recette_rare</td>
+				<td rowspan=2 align="left" valign=middle bgcolor="#706b64"><br></td>
+				<td rowspan=2 align="left" valign=middle bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px ridge #000000; border-bottom: 1px ridge #000000; border-left: 1px ridge #000000; border-right: 1px ridge #000000" colspan=2 rowspan=2 align="left" valign=middle bgcolor="#E6E6FF">recette_normal</td>
+				<td rowspan=2 align="left" valign=middle bgcolor="#706b64"><br></td>
+				<td rowspan=2 align="left" valign=middle bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px ridge #000000; border-bottom: 1px ridge #000000; border-left: 1px ridge #000000; border-right: 1px ridge #000000" colspan=2 rowspan=2 align="left" valign=middle bgcolor="#E6E6FF">recette_continue</td>
+				<td rowspan=2 align="left" valign=middle bgcolor="#706b64"><br></td>
+				<td rowspan=2 align="left" valign=middle bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000; border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000; border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000; border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td colspan=3 align="center" bgcolor="#706b64">Condition 3 &ndash; A</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td colspan=3 align="center" bgcolor="#706b64">Condition 3 &ndash; B</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td colspan=3 align="center" bgcolor="#706b64">Condition 3 &ndash; C</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">bouton1</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">bouton2</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">bouton3</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px ridge #000000" align="right" bgcolor="#706b64">or</td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">tempo7s</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px ridge #000000" align="right" bgcolor="#706b64">or</td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">mvt_cam_moy</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px ridge #000000" align="right" bgcolor="#706b64">or</td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">mvt_cam_haut</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" {% if Recette_Couleur.recette == "R4A" %} bgcolor={{Recette_Couleur.couleur}} {% else %} bgcolor="#706b64" {% endif %} >Recette 4A</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" {% if Recette_Couleur.recette == "R4B" %} bgcolor={{Recette_Couleur.couleur}} {% else %} bgcolor="#706b64" {% endif %} >Recette 4B</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" {% if Recette_Couleur.recette == "R4C" %} bgcolor={{Recette_Couleur.couleur}} {% else %} bgcolor="#706b64" {% endif %} >Recette 4C</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px ridge #000000; border-bottom: 1px ridge #000000; border-left: 1px ridge #000000; border-right: 1px ridge #000000" colspan=2 rowspan=2 align="left" valign=middle bgcolor="#E6E6FF">recette_peu</td>
+				<td rowspan=2 align="left" valign=middle bgcolor="#706b64"><br></td>
+				<td rowspan=2 align="left" valign=middle bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px ridge #000000; border-bottom: 1px ridge #000000; border-left: 1px ridge #000000; border-right: 1px ridge #000000" colspan=2 rowspan=2 align="left" valign=middle bgcolor="#E6E6FF">recette_frequent</td>
+				<td rowspan=2 align="left" valign=middle bgcolor="#706b64"><br></td>
+				<td rowspan=2 align="left" valign=middle bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px ridge #000000; border-bottom: 1px ridge #000000; border-left: 1px ridge #000000; border-right: 1px ridge #000000" colspan=2 rowspan=2 align="left" valign=middle bgcolor="#E6E6FF">recette_continue</td>
+				<td rowspan=2 align="left" valign=middle bgcolor="#706b64"><br></td>
+				<td rowspan=2 align="left" valign=middle bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td colspan=3 align="center" bgcolor="#706b64">Condition 4 &ndash; A</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td colspan=3 align="center" bgcolor="#706b64">Condition 4 &ndash; B</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td colspan=3 align="center" bgcolor="#706b64">Condition 4 &ndash; C</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">bouton1</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">bouton2</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">bouton3</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px ridge #000000" align="right" bgcolor="#706b64">or</td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">tempo7s</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px ridge #000000" align="right" bgcolor="#706b64">or</td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">mvt_cam_moy</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px ridge #000000" align="right" bgcolor="#706b64">or</td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="left" bgcolor="#E6E6FF">mvt_cam_haut</td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000; border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000; border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td style="border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td style="border-right: 1px ridge #000000" height="17" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td style="border-bottom: 1px ridge #000000; border-right: 1px ridge #000000" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+			<tr>
+				<td height="17" align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+				<td align="left" bgcolor="#706b64"><br></td>
+			</tr>
+		</table>
+		<footer> <em>Scadong v1H - juillet 2018 - Anthony Clerc et Laurent Roy </em> <img src="/static/CCBYSAr.png" alt="CC-BY-SA" align="right">
+		</footer>
+	</body>
+</html>

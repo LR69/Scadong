@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title> Scadong </title>
+		<meta Charset="utf-8" /> 
+		<!-- <link rel="stylesheet" type="text/css" href="feuille-de-styles.css"> -->
+		<link href="{{ url_for('static', filename='feuille-de-styles.css') }}" rel="stylesheet" type="text/css" />
+		<!-- <script src="jquery-3.3.1.js"></script> -->
+		<script src="{{url_for('static', filename='jquery-3.3.1.js')}}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+	</head>
+	<body>
+		<div class="simple-container" >
+			<header>
+				<h1> Scadong </h1>
+				<em> Musique distribuée </em>
+				<nav>
+					<ul>
+						<li><a href="/">Accueil</a></li>
+						<li><a href="/scapis">Scapis</a></li>
+						<li><a href="/upload">Upload</a></li>
+						<li><a href="/diagnostic">Diagnostic</a></li>
+					</ul>
+				</nav>
+			</header>
+
+
+			<div class="ext1">
+				{% with messages = get_flashed_messages() %}
+				  {% if messages %}
+					{% for message in messages %}
+					  <div class="alert alert-warning alert-dismissible" role="alert">
+					  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+						{{message}}
+					  </div>
+					{% endfor %}
+				  {% endif %}
+				{% endwith %}
+				<h2> Upload des fichiers .csv</h2>
+					<form action = "{{ url_for('upload_csv') }}" method = "POST" enctype = "multipart/form-data">
+						<div class="form-group">
+							<div class="input-group">
+								<table>
+									<tr>
+										<td>
+											<input type = "file" name = "file" />
+											<input type = "submit"/>
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">Sélectionner le Scapi où importer les fichiers :</span>
+									<select name="comp_select" class="selectpicker form-control">
+									  {% for s in Scapis%}
+									  <option value="{{ s.id}}">{{ s.id }}</option>
+									  {% endfor %}
+									</select>
+							</div>
+						</div>
+					</form> 
+				<h2> Initialisation du raspberry </h2>
+					<form action = "{{ url_for('init_rpi') }}" method = "POST" enctype = "multipart/form-data">
+						<div class="input-group">
+							<span class="input-group-addon">Sélectionner le Scapi à initialiser :</span>
+								<select name="comp_select3" class="selectpicker form-control">
+								  {% for s in Scapis%}
+								  <option value="{{ s.id}}">{{ s.id }}</option>
+								  {% endfor %}
+								</select>
+						</div>
+					 <button type="submit" class="btn btn-default">Initialisation raspberry</button>
+					</form>
+					
+					<table>
+						<tr>
+							<td>
+							Liste des sons dans le Serveur
+								<ul>
+								{% for s in sons_du_serveur%}
+										  <li>{{ s.nom_du_son}}</li>
+								{% endfor %}
+								</ul>
+							</td>
+							<td>
+							Liste des sons dans le Raspberry
+								<ul>
+								{% for s in sons_du_scapi%}
+										  <li>{{ s.Son_nom}}</li>
+								{% endfor %}
+								</ul>
+							</td>
+						</tr>
+					</table>
+				</form> 
+				<h2> Upload des fichiers sons</h2>
+					<form action = "{{ url_for('upload_sons') }}" method = "POST" enctype = "multipart/form-data">
+						<div class="form-group">
+							<div class="input-group">
+								<table>
+									<tr>
+										<td>
+											<input type = "file" name = "file" />
+											<input type = "submit"/>
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">Sélectionner le Scapi où importer les fichiers :</span>
+									<select name="comp_select2" class="selectpicker form-control">
+									  {% for s in Scapis%}
+									  <option value="{{ s.id}}">{{ s.id }}</option>
+									  {% endfor %}
+									</select>
+							</div>
+						</div>
+					</form> 
+
+				<h2> Upload des fichiers html</h2>
+					<form action = "{{ url_for('upload_html') }}" method = "POST" enctype = "multipart/form-data">
+						<div class="form-group">
+							<div class="input-group">
+								<table>
+									<tr>
+										<td>
+											<input type = "file" name = "file" />
+											<input type = "submit"/>
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon">Sélectionner le Scapi où importer les fichiers :</span>
+									<select name="comp_select2" class="selectpicker form-control">
+									  {% for s in Scapis%}
+									  <option value="{{ s.id}}">{{ s.id }}</option>
+									  {% endfor %}
+									</select>
+							</div>
+						</div>
+					</form> 
+
+			</div>
+			<footer> <em>Scadong v1H - juillet 2018 - Anthony Clerc et Laurent Roy </em> <img src="/static/CCBYSAr.png" alt="CC-BY-SA" align="right">
+			</footer>
+		</div>
+	</body>
+</html>
+
