@@ -1,0 +1,14 @@
+nom_etape,nom_recette
+init,recette_nul
+1A,recette_bourdon
+1B,recette_arpege
+1C,recette_bour_arp
+2A,recette_nul
+2B,0
+2C,0
+3A,recette_nul
+3B,0
+3C,0
+4A,recette_nul
+4B,0
+4C,0

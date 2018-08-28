@@ -1,0 +1,46 @@
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# Affichage de la date et de l'heure locale
+dt=$(date '+%d/%m/%Y %H:%M:%S');
+printf "Démarrage du Scapi à : $dt" 1>/home/pi/Scadong/raspberry/Scadong_rc_local.log 2>&1
+
+# Print the IP address
+_IP=$(hostname -I) || true
+if [ "$_IP" ]; then
+  printf "Adresse IP du Scapi : %s\n" "$_IP" 1>/home/pi/Scadong/raspberry/Scadong_rc_local.log 2>&1
+fi
+
+. /home/pi/.virtualenvs/cv3/bin/activate
+ping 192.168.1.100 -c5 -q 1>/home/pi/Scadong/raspberry/Scadong_rc_local.log 2>&1
+pong=$?
+echo "pong : $pong" 1>/home/pi/Scadong/raspberry/Scadong_rc_local.log 2>&1
+if [ $pong == 0 ]
+then
+    printf "serveur joignable : demarrage en mode Base de Données" 1>/home/pi/Scadong/raspberry/Scadong_rc_local.log 2>&1
+    option_run=""
+else
+    printf "serveur impossible à joindre : demarrage en mode autonome" 1>/home/pi/Scadong/raspberry/Scadong_rc_local.log 2>&1
+    option_run="--run"
+fi
+string=`vcgencmd get_camera`
+if [[ "$string" = *"detected=1"* ]]; then
+    echo "camera détectée!" 1>/home/pi/Scadong/raspberry/Scadong_rc_local.log 2>&1
+    option_cam="--camera"
+else
+    echo "camera absente!" 1>/home/pi/Scadong/raspberry/Scadong_rc_local.log 2>&1
+    option_cam=""
+fi
+echo "options $option_run $option_cam" 1>/home/pi/Scadong/raspberry/Scadong_rc_local.log 2>&1
+
+sh -c "(cd /home/pi/Scadong/raspberry && python Scadong.py $option_run $option_cam --loglevel 0 &)" 1>/home/pi/Scadong/raspberry/Scadong_rc_local.log 2>&1
+
+exit 0

@@ -3,257 +3,363 @@
 # Pour tout renseignement contacter Anthony CLERC à thyonan1 <thyonan1@hotmail.fr>
 # 21/11/17 : ajout des communications réseau via des sockets. Scadong joue le rôle de serveur.
 # 12/04/18 : bug problèmes de pas
+# 25/07/18 ajout de la connexion à la base de données
+# 19/08/18 modification de l'initialisation de la base de donnée : peut-être appelée par l'interface web
+# 28/08/18 prise en compte des différentes options de lancement (--run, --camera, --loglevel)
+#			si loglevel = 0 : log comprend les initialisation, démarrage, et changements de mode
+#			si loglevel = 1 : log comprend la même chose que 0 +  les changements d'étapes + sons joués
+#			si loglevel = 2 : log comprend la même chose que 1 +  les messages du fournisseurs
+
 import grafcet
-import sequenceur
-import Scadong_utils
-import csv
-import random
+import fournisseur
+import os
 import time
-from math import *
-from filtres import *
-#from pynput import keyboard
-from multiprocessing import Process, Queue
-import Serveur_Scadong # AJR
-
-#variables globales
-chemin_csv = "fichiers_csv/" #pour pouvoir trouver le chemin des fichiers
+import multiprocessing as mp
+import queue
+import mysql.connector
+from datetime import datetime
+import argparse 
 
 
 
-def fournir_feuille(q_li,q_or,q_et):
-        """ ce processus fournit des sons au séquenceur quand celui-ci en fait la demande """
-        Feuille_papier_musique=[] # la feuille qui contient tous les sons que le séquenceur doit jouer.
-        ligne=[] # une ligne de la feuille
-        fq=Queue() # queue de transfert des sons au séquenceur
-        oq=Queue() # queue de transfert des ordres au séquenceur
-        eq=Queue() # queue de transfert des états depuis le séquenceur
-        
-        # Lancement du séquenceur
-        psequenceur = Process(target=sequenceur.sequenceur, args=(fq,oq,eq)) # fq = canal des feuilles, oq canal des ordres donnés au séquenceur, eq canal états séquenceur
-        psequenceur.start()
-        oq.put("go")
-        o=""
-        e=""
-        while o!="arret":
-                ### échanges avec processus parent
-                if q_or.empty()==False:
-                        try:
-                                o=q_or.get(False) # non bloquant
-                                #print("ordre du pgme principal au fournisseur : {}".format(o)) #pour debug
-                        except queue.Empty:
-                                pass
-                # On jette la feuille papier musique sur ordre du processus parent
-                if o=="flush":
-                        Feuille_papier_musique=[] 
-                        #oq.put("flush")
-                if q_li.empty()==False:
-                        try:
-                                ligne=q_li.get(False) # non bloquant
-                                Feuille_papier_musique.append(ligne) # on rajoute la ligne reçue au tampon
-                                #print("ligne reçue du programme ppal : {}".format(ligne)) #pour debug
-                        except queue.Empty:
-                                pass
-                # échanges avec le processus Enfant
-                if eq.empty()==False:
-                        try:
-                                e=eq.get(False)  # non bloquant
-                                #print("message du séquenceur : {}".format(e)) #pour debug
-                        except queue.Empty:
-                                pass
-                if (e=="demande_papier" or e=="fin_papier") and Feuille_papier_musique!=[]: #on ne peut fournir des sons que si on en a en réserve.
-                        ligne=Feuille_papier_musique[0]
-                        fq.put(ligne) #envoi d'une ligne au séquenceur
-                        #print("envoi au séquenceur de la ligne : {}".format(ligne)) 
-                        del Feuille_papier_musique[0] # la igne a été envoyée, elle est retirée du tampon d'envoi.
-                time.sleep(0.002)
-        # demande d'arrêt du séquenceur
-        oq.put("stop")
-        while e!="fin":
-                e=eq.get()
-        #print("message2 : {}".format(e)) #pour debug
-        q_et.put("termine") # on prévient le processus parent qu'on sort
-        print("\n \n ****** Fin séquenceur *********")
-        psequenceur.join()
+# récupération des options de commande
+parser = argparse.ArgumentParser()
+parser.add_argument("-r", "--run", help="demarrage directement en run du programme Scadong",action="store_true")
+parser.add_argument("-c", "--camera", help="demarrage avec prise en charge de la camera",action="store_true")
+parser.add_argument("--loglevel", type = int,  choices = range(0,3), help="niveau moyen d'enregistrement des logs (0 : mini ; 2 : maxi)",)
+
+args = parser.parse_args()
+
+if args.camera:
+	import PiEye
+
+if args.loglevel == None:
+	args.loglevel = 0
+
+def initialisation_BDD():
+	""" Connexion à la base de donnée SQL et insertion des instruments dans la BDD """
+	try:
+		conn=mysql.connector.connect(host="192.168.1.100",user="scapi", password="scapi", database="Scadong")
+		cursor = conn.cursor()
+		#effacement des bases de données initiales
+		ref=(num_Scapi,)
+		cursor.execute("""SELECT Son_nom FROM Scapi_sons WHERE Scapi_id=%s; """,ref)
+		rows = cursor.fetchall()
+		print(" les sons initialement présents :\n {}".format(rows))
+		for row in rows:
+			cursor.execute(""" DELETE FROM Sons WHERE nom_du_son = %s;""",row)
+		cursor.execute(""" DELETE FROM Scapi_sons WHERE Scapi_id = %s;""",ref)
+		cursor.execute(""" DELETE FROM Instrument WHERE Scapi_id = %s;""",ref)
+
+		for g7 in grafcets:
+			# mise à jour de la table des instruments
+			print("g7.nom={}, num_Scapi={}, g7.typeG7={}".format(g7.nom, num_Scapi, g7.typeG7))
+			instrum = (g7.nom, num_Scapi, g7.typeG7, 0.0)
+			cursor.execute(""" INSERT INTO Instrument VALUES(%s, %s, %s, NULL, NULL, NULL, NULL, NULL, NULL, %s);""",instrum)
+			# mise à jour de la liste des sons
+			fichier_des_sons = "/home/pi/Scadong/raspberry/fichiers_csv/" + g7.nom + "_id_son.csv"
+			ref = (fichier_des_sons, ',' , '\r\n', 1)
+			cursor.execute(""" LOAD DATA LOCAL INFILE %s INTO TABLE Sons FIELDS TERMINATED BY %s LINES TERMINATED BY %s IGNORE %s LINES; """,ref)
+		# mise à jour de la table des fichiers sons présents dans le scapi
+		cursor.execute("""SELECT nom_du_son FROM Sons; """)
+		rows = cursor.fetchall()
+		chemin_sons="fichiers_sons/" 
+		liste_fichiers_sons = os.listdir(chemin_sons)
+		noms_sons =[fichier.rpartition(".")[0] for fichier in liste_fichiers_sons] #liste des sons présents dans le dossier liste_fichiers_sons
+		#print(noms_sons) #pour debug
+		for row in rows:
+			#print("le son {}".format(row[0])) #pour debug
+			if row[0] in noms_sons:
+				#print("est présent dans la liste") #pour debug
+				scapi_son = (num_Scapi, row[0])
+				cursor.execute(""" INSERT INTO Scapi_sons VALUES( NULL,%s, %s);""",scapi_son)
+		scapi_mode_update = ("pause",num_Scapi)
+		cursor.execute(""" UPDATE Scapi SET mode=%s WHERE id=%s;""",scapi_mode_update) 
+		conn.commit()
+
+		Cnx = True
+	except mysql.connector.errors.InterfaceError as e:
+		Cnx = False
+		print("Error %d: %s" % (e.args[0],e.args[1]))
+		pass
+	finally:
+		# On ferme la connexion
+		if conn:
+			conn.close()
+		return Cnx
+
+def recup_consign_BDD():
+	""" récupération des consignes provenant de la BDD """
+	mode_pi = "run" # si pas de connexion avec le serveur, on lance quand même le programme.
+	motBP=0
+	try:
+		conn=mysql.connector.connect(host="192.168.1.100",user="scapi", password="scapi", database="Scadong")
+		cursor = conn.cursor()
+		cursor.execute("""SELECT mode,cmde_BP FROM Scapi WHERE id=%s;""",[num_Scapi])
+		tab = cursor.fetchall()
+		#print(tab) # pour debug
+		if len(tab)>0:
+			if len(tab[0])>1:
+				mode_pi = tab[0][0]
+				motBP = tab[0][1]
+	except mysql.connector.errors.InterfaceError as e:
+		print("Error %d: %s" % (e.args[0],e.args[1]))
+		pass
+	finally:
+		# On ferme la connexion
+		if conn:
+			conn.close()
+		cons_BPa = motBP & 1
+		cons_BPb = motBP>>1 & 1
+		cons_BPc = motBP>>2 & 1
+		return (mode_pi,cons_BPa,cons_BPb,cons_BPc)
+
+def env_data_BDD(mt_IO, mvt, mde, consBPa,consBPb, consBPc):
+	""" acquittement des consignes provenant de la BDD et écritures des entrées du Scadong """
+	consBP = consBPc << 2 | consBPb <<1 | consBPa
+	mvt_str = "{:.1f}".format(mvt)
+	try:
+		conn=mysql.connector.connect(host="192.168.1.100",user="scapi", password="scapi", database="Scadong")
+		cursor = conn.cursor()
+		scapi_update = (mt_IO, mvt_str, mde, consBP, num_Scapi)
+		# on envoie aussi l'heure du serveur, et pas celle du Scapi, car le but est de comporer les temps pour déterminer l'inactivité du Scapi
+		cursor.execute(""" UPDATE Scapi SET ETOR=%s, mvmt=%s, time=NOW(), mode_acquit=%s, cmde_BP_acquit = %s WHERE id=%s;""",scapi_update) 
+		conn.commit()
+		Cnx = True
+	except mysql.connector.errors.InterfaceError as e:
+		Cnx = False
+		print("Error %d: %s" % (e.args[0],e.args[1]))
+		pass
+	finally:
+		# On ferme la connexion
+		if conn:
+			conn.close()
+		return (Cnx)
+
+def maj_instrums_BDD(instrs, etaps, recets,ligne_infos):
+	""" mises à jour des étapes et recettes en cours des différents instruments """
+	try:
+		conn=mysql.connector.connect(host="192.168.1.100",user="scapi", password="scapi", database="Scadong")
+		cursor = conn.cursor()
+		for instr in instrs:
+			i = instrs.index(instr)
+			etap = etaps[i]
+			recet = recets[i]
+			instrum_update = (etap,recet,instr)
+			cursor.execute(""" UPDATE Instrument SET etape_en_cours=%s, recette_en_cours=%s WHERE nom_instrum=%s;""",instrum_update)
+			if len(ligne_infos)>i:
+				if len(ligne_infos[i])>0:
+					sequenc = ligne_infos[i][0][0]
+					trig = ligne_infos[i][0][1]
+					filtr = ligne_infos[i][0][2]
+					fich_son = ligne_infos[i][0][3]
+					volu = ligne_infos[i][0][4]
+					instrum_update = (sequenc,trig,filtr,fich_son,volu,instr)
+					cursor.execute(""" UPDATE Instrument SET sequence_en_cours=%s, trig_en_cours=%s, filtre_en_cours=%s, Son_nom=%s, volume_en_cours =%s WHERE nom_instrum=%s;""",instrum_update)
+		conn.commit()
+		Cnx = True
+	except mysql.connector.errors.InterfaceError as e:
+		Cnx = False
+		print("Error %d: %s" % (e.args[0],e.args[1]))
+		pass
+	finally:
+		# On ferme la connexion
+		if conn:
+			conn.close()
+		return (Cnx)
 
 
-def traitement_grafcet(q_etape,q_recette,q_ordre,q_etat):#AJR
-        """ Ce processus gère toute la partie logique séquentielle du programme ainsi que les E/S
-        """
-        instrumentiste=grafcet.Grafcet(chemin_csv+"etapes.csv", chemin_csv+"conditions.csv",chemin_csv+"transitions.csv",q_etape,q_recette,"normal")
-        #keyboard.Listener(on_press=instrumentiste.on_press, on_release=instrumentiste.on_release).start()
-        instrumentiste.start_init()
-        ordre=""
-        while (not instrumentiste.arret and ordre!="arret"):
-                instrumentiste.scrutation()
-                time.sleep(0.002) # pour permettre à la boucle de détecter une variation de temps
-                try: #AJR
-                        while q_ordre.empty()==False: #pour disposer de la dernière info
-                            ordre=q_ordre.get(False)
-                except queue.Empty:
-                    e="queue recette est vide"
-                    print(e) #pour debug
-                    pass
-        q_recette.put("nc") #pour informer le processus principal
-        q_etape.put("fin") #pour informer le processus principal
-        
-    
-
-# test grafcet "instrumentiste" en python
+# Programme Principal
 if __name__ == "__main__":
-        # import csv des sons
-        colonnes_sons=['nom du son','Durée (sec)','Motcle 1','Motcle 2','Motcle 3','Motcle 4','Motcle 5','Motcle 6','Motcle 7','Motcle 8','Motcle 9','Motcle 10','Motcle 11','Motcle 12','Motcle 13','Motcle 14','Motcle 15','Motcle 16','Motcle 17','Motcle 18','Nuance 1','Nuance 2','Nuance 3','Nuance 4','Nuance 5','Nuance 6','Nuance 7','Attaque 1','Attaque 2','Attaque 3','Relâchement 1','Relâchement 2','Relâchement 3','Note Fondamental 1','Note Fondamental 2','Note Fondamental 3','Note Fondamental 4','Note Fondamental 5','Note Fondamental 6','Note Fondamental 7','Note Fondamental 8','Note Fondamental 9','Note Fondamental 10','Note Fondamental 11','Note Fondamental 12','Note Fondamental 13','Phrase Musical ?','Phrasé','note dans l\'Accord 1','note dans l\'Accord 2','note dans l\'Accord 3','note dans l\'Accord 4','note dans l\'Accord 5','note dans l\'Accord 6','note dans l\'Accord 7','note dans l\'Accord 8','note dans l\'Accord 9','note dans l\'Accord 10','note dans l\'Accord 11','note dans l\'Accord 12','Tempo','Variation de Tempo','priorité (de 0 à 100)']
-        inventaire_sons = Scadong_utils.import_csv(chemin_csv+"inventaire_sons.csv", colonnes_sons) #import csv des sons
-        #print(inventaire_sons) # pour debug
-        print("import csv des sons OK")
-        colonnes_filtres=['nom du filtre','Durée mini (sec)','Durée maxi (sec)','Motcle 1','Motcle 2','Motcle 3','Motcle 4','Motcle 5','Motcle 6','Motcle 7','Motcle 8','Motcle 9','Motcle 10','Motcle 11','Motcle 12','Motcle 13','Motcle 14','Motcle 15','Motcle 16','Motcle 17','Motcle 18','Nuance 1','Nuance 2','Nuance 3','Nuance 4','Nuance 5','Nuance 6','Nuance 7','Attaque 1','Attaque 2','Attaque 3','Relâchement 1','Relâchement 2','Relâchement 3','Note Fondamental 1','Note Fondamental 2','Note Fondamental 3','Note Fondamental 4','Note Fondamental 5','Note Fondamental 6','Note Fondamental 7','Note Fondamental 8','Note Fondamental 9','Note Fondamental 10','Note Fondamental 11','Note Fondamental 12','Note Fondamental 13','Phrase Musical ?','Phrasé','note dans l\'Accord 1','note dans l\'Accord 2','note dans l\'Accord 3','note dans l\'Accord 4','note dans l\'Accord 5','note dans l\'Accord 6','note dans l\'Accord 7','note dans l\'Accord 8','note dans l\'Accord 9','note dans l\'Accord 10','note dans l\'Accord 11','note dans l\'Accord 12','Tempo min','Tempo max','Variation de Tempo','priorité (de 0 à 100)']
-        inventaire_filtres = Scadong_utils.import_csv(chemin_csv+"filtres.csv", colonnes_filtres) #import csv des filtres
-        #print(inventaire_filtres) # pour debug
-        print("import csv des filtres OK")
-        #test_filtres(inventaire_sons,inventaire_filtres) #pour debug
-        
-        colonnes_recettes=['nom de recette','filtre','séquence','départ séquence','type de lecture','nbre de canal de lecture max','départ vers effet A','départ vers effet B','départ vers effet C','départ vers effet D','départ vers effet E','départ vers effet F','départ vers effet G','départ vers effet H']
-        inventaire_recettes = Scadong_utils.import_csv(chemin_csv+"recettes.csv", colonnes_recettes) #import csv des recettes
-        #print(inventaire_recettes) # pour debug
-        print("import csv des recettes OK")
-        
-        colonnes_sequences=['nom séquence','taille du pas','longueur séquence','nombre de boucle séquence(-1 = inf)','trig','temps du trig (en pas)','volume (vélocité)','filtre','chance de jeu (entre 0 et 100)','départ vers effet A','départ vers effet B','départ vers effet C','départ vers effet D','départ vers effet E','départ vers effet F','départ vers effet G','départ vers effet H']
-        inventaire_sequences = Scadong_utils.import_csv(chemin_csv+"sequences.csv", colonnes_sequences) #import csv des sequences
-        print([element['nom séquence'] for element in inventaire_sequences])
-        print("import csv des sequences OK")
-        
-        # Lancement du processus fournissant des feuilles au séquenceur
-        q_ligne = Queue()
-        q_ordre = Queue()
-        q_etat = Queue()
-        pfournisseur = Process(target=fournir_feuille, args=(q_ligne,q_ordre,q_etat))
-        pfournisseur.start()
-        
-        
-        # Lancement du processus serveur pour pilotage à distance de scadong
-        etape="" #AJR
-        recette="" #AJR
-        ordre="" #AJR
-        etat="" #AJR
-        qs_etape = Queue() #AJR
-        qs_recette = Queue() #AJR
-        qs_son = Queue() #AJR
-        qs_ordre = Queue()
-        qs_etat = Queue()
-        pserveur = Process(target=Serveur_Scadong.traitement_serveur, args=(qs_etape,qs_recette,qs_son,qs_ordre,qs_etat))#AJR
-        pserveur.start() #AJR
-        # attente d'un ordre de démarrage
-        while(ordre!="go"):#AJR
-                try:
-                        while qs_ordre.empty()==False: #pour disposer de la dernière info
-                            ordre=qs_ordre.get(False)
-                except queue.Empty:
-                    e="queue recette est vide"
-                    print(e) #pour debug
-                    pass
-        
-        #début du programme instrumentiste (=grafcet)
-        qrecette = Queue()
-        qetape = Queue()
-        qordre = Queue()
-        qetat = Queue()
-        pinstrumentiste = Process(target=traitement_grafcet, args=(qetape,qrecette,qetape,qetat))
-        pinstrumentiste.start()
-        print("c'est parti !") # pour debug
-        
-        while (ordre!="stop") and (etape != "fin"):#AJR
-                etape = qetape.get()
-                recette = qrecette.get()
-                print("etape en cours : {}".format(etape))
-                print("recette en cours : {}".format(recette))
-                q_ordre.put("flush") # on vide la liste des sons en attente
-                liste_sons_filtres=[] # 1er tri
-                liste_sons_filtres2=[] # 2nd tri
-                liste_sons_filtres3=[] # 3ème tri
-                ### Application de la recette
-                if(recette != "" and recette != "nc"):
-                        #recette trouvée dans la liste des recettes à partir du nom de la recette
-                        recette_dans_liste=[element for element in inventaire_recettes if element['nom de recette']==recette][0] # on trouve la recette en cours dans l'inventaire des recettes
-                        print("recette trouvée dans la liste = {}".format(recette_dans_liste)) # pour debug
-                        filtre_recette_nom = recette_dans_liste['filtre']
-                        if (filtre_recette_nom != "" and filtre_recette_nom != "nc"):
-                                filtre_recette=[element for element in inventaire_filtres if element['nom du filtre']==filtre_recette_nom][0] 
-                                #print("Filtre applicable au niveau de la recette : {}".format(filtre_recette)) # pour debug
-                                #premier filtrage des sons :
-                                liste_sons_filtres=filtrage(inventaire_sons,filtre_recette)
-                                print("Nom du filtre applicable au niveau de la recette : {}".format(filtre_recette_nom)) # pour debug
-                                print("nombre de sons après filtrage recette : {}".format(len(liste_sons_filtres)))     # pour debug
-                                #print([element['nom du son'] for element in liste_sons_filtres]) # pour debug
-                        else:
-                                liste_sons_filtres=inventaire_sons #pas de premier filtrage
-                ### Application de la séquence
-                #séquence trouvée dans la liste des séquences à partir du nom de la séquence figurant dans la recette
-                sequences_dans_liste=[element for element in inventaire_sequences if element['nom séquence']==recette_dans_liste['séquence']] # on trouve la liste des séquences de nom 'nom séquence'
-                print("Nom de la séquence applicable au niveau de la recette : {}".format([element['nom séquence'] for element in sequences_dans_liste][0])) # pour debug
-                print("Nombre de trigs: {}".format(len([element['nom séquence'] for element in sequences_dans_liste]))) # pour debug
-                longueur_sequence = int([element['longueur séquence'] for element in sequences_dans_liste][0])
-                print("longueur séquence :{}".format(longueur_sequence)) # pour debug
-                taille_pas = int([element['taille du pas'] for element in sequences_dans_liste][0])
-                print("taille du pas :{}".format(taille_pas)) # pour debug
-                for tic in range(1,longueur_sequence): # tic = pas
-                        #print("pas = {} ; ".format(tic)) # pour debug
-                        sequences_au_tic = [element for element in sequences_dans_liste if int(element['temps du trig (en pas)'])==tic] #on trouve les séquences à jouer pour ce pas de temps
-                        #print("Nombre de trig: {} au pas : {}".format(len([element['nom séquence'] for element in sequences_au_tic]),tic)) # pour debug
-                        ligne_trous=[] # une nouvelle ligne de trous dans le papier à musique
-                        for sequence in sequences_au_tic:
-                                volume = float(sequence['volume (vélocité)'])/100.0 #volume compris entre 0 et 1
-                                filtre_sequence = [element for element in inventaire_filtres if element['nom du filtre']==sequence['filtre']][0]
-                                #print("un filtre applicable au tic:{} est :{}".format(tic, filtre_sequence['nom du filtre'])) #pour debug
-                                #print("le volume à jouer est :{}".format(volume))
-                                #second filtrage des sons :
-                                liste_sons_filtres2=filtrage(liste_sons_filtres,filtre_sequence)
-                                if len(liste_sons_filtres)>0:
-                                        print("nombre de sons après filtrage séquence : {}".format(len(liste_sons_filtres2)))   # pour debug
-                                #print("noms des sons triés au niveau de la séquence : ") # pour debug
-                                #print([element['nom du son'] for element in liste_sons_filtres2]) # pour debug
-                                #tri des sons par priorité
-                                if liste_sons_filtres2!=[]:
-                                        score=0
-                                        for element in liste_sons_filtres2:
-                                                score_temp = int(element['priorité (de 0 à 100)'])
-                                                #print("score temp= {}".format(score_temp)) # pour debug
-                                                if score_temp > score:
-                                                        score = score_temp
-                                        #print("score = {}".format(score)) # pour debug
-                                        liste_sons_filtres3=[element for element in liste_sons_filtres2 if int(element['priorité (de 0 à 100)'])==score]
-                                        #print("noms des sons triés et prioritaires : ") # pour debug
-                                        #print([element['nom du son'] for element in liste_sons_filtres3]) # pour debug
-                                        index_alea=random.randint(1,len(liste_sons_filtres3)) # random.randint(a, b) Return a random integer N such that a <= N <= b. Alias for randrange(a, b+1).
-                                        #print(index_alea) # pour debug
-                                        for i in range(0,index_alea):
-                                                son_a_jouer=liste_sons_filtres3.pop()
-                                        #print("son à jouer : {}".format(son_a_jouer['nom du son'])) # pour debug
-                                        fichier_son_a_jouer=son_a_jouer['nom du son']+".wav"
-                                        trou = (fichier_son_a_jouer, volume)
-                                        #on fait un trou sur ligne de trous dans le papier à musique
-                                        ligne_trous.append(trou)
-                        if ligne_trous != [] :
-                                print("sons à jouer au trig{}:{}".format(tic,ligne_trous))
-                        q_ligne.put(ligne_trous)
-                print("\n \n") # pour debug
-                #gestion des communications réseau avec le client
-                qs_etape.put(etape) #AJR
-                qs_recette.put(recette) #AJR
-                qs_son.put(fichier_son_a_jouer) #AJR
-                try: #AJR
-                        while qs_ordre.empty()==False: #pour disposer de la dernière info
-                            ordre=qs_ordre.get(False)
-                except queue.Empty:
-                    e="queue recette est vide"
-                    print(e) #pour debug
-                    pass
-                time.sleep(0.002) # pour permettre à la boucle de détecter une variation de temps
-        qs_etape.put("init") #AJR
-        q_ordre.put("arret") # on arrete le fournisseur de feuilles
-        qordre.put("arret") # AJR on arrete l'instrumentiste
-        while e!="termine":
-                e=q_etat.get()
-                #print("message2 : {}".format(e)) #pour debug
-        print("\n \n ****** Fin *********")
-        pfournisseur.join()
-        pinstrumentiste.join()
-        pserveur.join(3)
+	# initialisation de la caméra
+	if args.camera:
+		Oeil=PiEye.PiEye() # initialisation de la caméra
+	# première acquisition des entrées TOR
+	mot_IO = 0
+	mot_IO = grafcet.AcquisitionETOR(mot_IO)
+	chemin="fichiers_csv/" 
+	### initialisation des grafcets
+	chemin="fichiers_csv/" 
+	mode="normal" # "debug" ou "normal"
+	#récupération du numéro de Scapi
+	hstnme=open("/etc/hostname",'r')
+	nom_rpi=hstnme.read().rstrip()
+	num_Scapi = int(nom_rpi[len(nom_rpi)-1])
+	# inventaire des grafcets à créer sur la base des fichiers déposés
+	liste_fichiers = os.listdir(chemin)
+	fin ="conditions.csv"
+	noms_instruments =[fichier.rpartition("_")[0] for fichier in liste_fichiers if fichier.endswith(fin)]
+	presentement = datetime.now()
+	presentement_date = presentement.strftime("%d/%m/%y")
+	presentement_heure = presentement.strftime("%H:%M:%S")
+	# création du fichier de logs
+	with open("Scadong.log",'w') as log:
+		log.write("Fichier de log du programme scadong lancé le {} à {}, heure du raspberry concerné : {}\n\n". format(presentement_date,presentement_heure,nom_rpi))
+		log.write("Programme lancé avec les options suivantes : \n\t\t- mode run :{}\n\t\t- mode camera:{}\n\t\t- loglevel:{}".format(args.run, args.camera, args.loglevel))
+		log.write("\nLa lecture des fichiers *.csv a permis d'inventorier les instruments suivants :\n")
+		log.write(str(noms_instruments))
+
+	# création des grafcets
+	grafcets=[]
+	for nom_instrum in noms_instruments:
+		fichier_type = chemin+nom_instrum+"_"+"type.csv"
+		fichier_etapes = chemin+nom_instrum+"_"+"etapes.csv"
+		fichier_conditions = chemin+nom_instrum+"_"+"conditions.csv"
+		fichier_transitions = chemin+nom_instrum+"_"+"transitions.csv"
+		g7=grafcet.Grafcet(nom_instrum,fichier_type, fichier_etapes, fichier_conditions, fichier_transitions, mode)
+		grafcets.append(g7)
+	# initialisation des grafcets
+	msg=""
+	for g7 in grafcets:
+		g7.start_init()
+		msg+="\n On crée et on initialise le grafcet {}\n".format(g7.nom)
+		
+	# initialisation des instruments dans la base de donnée SQL
+	if not args.run:
+		BDD_rdy=initialisation_BDD()
+		with open("Scadong.log",'a') as log:
+			log.write(msg)
+			log.write("\n Base de donnée correctement initialisée : {}\n".format(BDD_rdy))
+	
+	
+	# mode par défaut : run
+	mode_Scapi = "run"
+
+	### processus fournissant les sons 
+	ctx = mp.get_context('spawn')
+	q_instrum = ctx.Queue() 
+	q_etap = ctx.Queue()
+	q_recet = ctx.Queue()
+	q_ordre = ctx.Queue()
+	q_etat = ctx.Queue()
+	pfournisseur = ctx.Process(target=fournisseur.fournir_sons, args=(q_instrum,q_etap,q_recet,q_ordre,q_etat))
+	pfournisseur.start()
+	# Lancement du processus fournissant des feuilles au séquenceur
+	q_instrum.put(noms_instruments)
+	q_ordre.put("init")
+	#cycle automate
+	e=""
+	mode_Scapi=""
+	flag_run = True
+	flag_run_send = False
+	flag_pause_send = False
+	t0=datetime.now()
+	format_date = "%d/%m/%y %H:%M:%S"
+	with open("Scadong.log",'a') as log:
+		log.write("\nOn démarre le cycle automate à :{}, t={}\n".format(t0.strftime(format_date),time.time()))
+	while e!="termine" and mode_Scapi!="stop" :
+		if mode_Scapi=="init" and not args.run:
+			# initialisation des instruments dans la base de donnée SQL
+			BDD_rdy=initialisation_BDD()
+			with open("Scadong.log",'a') as log:
+				log.write(msg)
+				log.write("\n {} : Base de donnée correctement initialisée : {}\n".format(time.time(),BDD_rdy))
+		msg_log=""
+
+		# acquistion caméra
+		if args.camera:
+			mouvement = Oeil.voir()
+		else:
+			mouvement = 0
+		if args.loglevel>0:
+			msg_log+="\n\n\nt = {}\n".format(time.time())
+			msg_log+="\t mouvement = {:.1f}\n".format(mouvement)
+		# acquisition des entrées TOR
+		mot_IO = grafcet.AcquisitionETOR(mot_IO)
+		if args.loglevel>0:
+			msg_log+="\t mot_IO = {}\n".format(mot_IO)
+		#récupération des consignes du serveur
+		if args.run:
+			mode_Scapi = "run"
+		else:
+			(mode_Scapi,consigne_BPa,consigne_BPb,consigne_BPc)=recup_consign_BDD()
+
+			# acquitement et recopie des entrées du pi (GPIO et mvmt) sur le serveur 
+			BDD_rdy=env_data_BDD(mot_IO,mouvement,mode_Scapi, consigne_BPa, consigne_BPb, consigne_BPc)
+			if args.loglevel>0:
+				msg_log+="\t consignes BDD : mode_Scapi = {},consigne_BPa = {},consigne_BPb ={},consigne_BPc={}\n".format(mode_Scapi,consigne_BPa,consigne_BPb,consigne_BPc)
+				msg_log+="Message Base de donnée correctement acquittée: {} \n".format(BDD_rdy)
+		# gestion des modes de marche
+		if mode_Scapi == "run": # pas d'évolution du grafcet si pas en run
+			if not flag_run and not flag_run_send: # si le séquenceur n'était pas en run
+				q_ordre.put("dmd_run") # on demande le passage en run du séquenceur
+				t1=datetime.now()
+				msg_log+="\n\n {} :".format(t1.strftime(format_date))
+				msg_log+="!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ON DEMANDE LE PASSAGE EN RUN $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n\n"
+				flag_run_send = True
+		else:
+			if flag_run and not flag_pause_send: # si on était en run
+				t2=datetime.now()
+				msg_log+="\n\n {} :".format(t2.strftime(format_date))
+				msg_log+="\n\n??????????????????????????????????????? ON DEMANDE LE PASSAGE EN PAUSE §§§§§§§§§§§§§§§§§§§§§§§§§§§§§§\n\n"
+				q_ordre.put("dmd_pause") #on demande au séquenceur de passer en pause
+				flag_pause_send = True
+		#scrutation des grafcets
+		etapes=[]
+		recettes=[]
+		line=[]
+		newsline=[]
+		if args.loglevel>0:
+			msg_log+="scrutation des grafcets :\n"
+		for g7 in grafcets:
+			if mode_Scapi == "run":
+				g7.scrutation(mouvement,mot_IO) 
+				etapes.append(g7.etape)
+				recettes.append(g7.recette)
+			if args.loglevel>0:
+				msg_log+="grafcet {} de type {}:\n".format(g7.nom, g7.typeG7)
+				msg_log+="\t l'étape en cours est : {}\n".format(g7.etape)
+				msg_log+="\t la recette en cours est : {}\n".format(g7.recette)
+		# actions
+		if mode_Scapi == "run": # pas d'évolution du grafcet si pas en run
+			q_etap.put(etapes)
+			q_recet.put(recettes)
+			q_ordre.put("nouvelle_etape")
+		# recupération messages processus fournisseur
+		e="rien pour le moment"
+		while len(e) > 0:
+			e=""
+			try:
+				e=q_etat.get(False)
+				if args.loglevel>1:
+					msg_log+="\n\n################ début message fournisseur ##############################\n"
+					msg_log+=str(e)
+				if e =="ligne":
+					line=q_etat.get()
+					newsline=q_etat.get()#[0]
+					if args.loglevel>1:
+						msg_log+="line : {}".format(line) # pour debug
+						msg_log+="newsline : {}\n".format(newsline) # pour debug
+					if not args.run:
+						# Mise à jour de la BDD avec l'étape et la recette en cours
+						BDD_rdy = maj_instrums_BDD(noms_instruments, etapes, recettes, newsline)
+						if args.loglevel>1:
+							msg_log+="\n\n mise à jour BDD instruments : {}\n\n".format(BDD_rdy)
+				if e == "run_OK":
+					flag_run = True
+					flag_run_send = False
+				if e == "pause_OK":
+					flag_run = False
+					flag_pause_send = False
+			except queue.Empty:
+				pass
+		# mise à jour fichier de logs
+		with open("Scadong.log",'a') as log:
+			log.write(msg_log)
+		# affichage console
+		os.system('clear')
+		print("mouvement détecté par la caméra :{:.3f}\n\n\n".format(mouvement))
+		print("mot_IO={}".format(mot_IO))
+		for g7 in grafcets:
+			print("grafcet {} de type {}:".format(g7.nom, g7.typeG7))
+			print("\t l'étape en cours est : {}".format(g7.etape))
+			print("\t la recette en cours est : {}".format(g7.recette))
+		#time.sleep(0.001)
+	q_ordre.put("dmd_arret")
+	pfournisseur.join()
+	presentement = datetime.now()
+	presentement_date = presentement.strftime("%d/%m/%y")
+	presentement_heure = presentement.strftime("%H:%M:%S")
+	with open("Scadong.log",'w') as log:
+		log.write("# FIN du programme scadong  le {} à {}, heure du raspberry concerné : {}\n\n". format(presentement_date,presentement_heure,nom_rpi))
+	print("\n \n ****** Fin Processus principal *********")

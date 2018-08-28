@@ -1,6 +1,5 @@
-""" Module "Filtres" contenant toutes les fonctions de filtrage des sons 
-	v1d
-"""
+import Scadong_utils
+import random
 
 def filtre_duree(inventaire, mini, maxi):
 	""" fonction retournant la liste des sons de l'inventaire dont la durée est comprise entre mini et maxi"""
@@ -60,12 +59,12 @@ def filtre_noteF(inventaire, texte_cherche):
 
 def filtre_phraseMus(inventaire):
 	""" fonction retournant la liste des sons de l'inventaire ayant un phrasé musical"""
-	resultat=[element for element in inventaire if element['Phrase Musical ?'] == "True"]
+	resultat=[element for element in inventaire if element['Phrase Musical?'] == "True"]
 	return resultat
 
 def filtre_not_phraseMus(inventaire):
 	""" fonction retournant la liste des sons de l'inventaire n'ayant pas un phrasé musical"""
-	resultat=[element for element in inventaire if element['Phrase Musical ?'] == "False"]
+	resultat=[element for element in inventaire if element['Phrase Musical?'] == "False"]
 	return resultat
 
 def filtre_phrase(inventaire, texte_cherche):
@@ -100,7 +99,7 @@ def filtre_variTempo(inventaire, texte_cherche):
 	return resultat
 
 def filtrage(liste_sons_1,filtre):
-	colonnes_filtres=['nom du filtre','Durée mini (sec)','Durée maxi (sec)','Motcle 1','Motcle 2','Motcle 3','Motcle 4','Motcle 5','Motcle 6','Motcle 7','Motcle 8','Motcle 9','Motcle 10','Motcle 11','Motcle 12','Motcle 13','Motcle 14','Motcle 15','Motcle 16','Motcle 17','Motcle 18','Nuance 1','Nuance 2','Nuance 3','Nuance 4','Nuance 5','Nuance 6','Nuance 7','Attaque 1','Attaque 2','Attaque 3','Relâchement 1','Relâchement 2','Relâchement 3','Note Fondamental 1','Note Fondamental 2','Note Fondamental 3','Note Fondamental 4','Note Fondamental 5','Note Fondamental 6','Note Fondamental 7','Note Fondamental 8','Note Fondamental 9','Note Fondamental 10','Note Fondamental 11','Note Fondamental 12','Note Fondamental 13','Phrase Musical ?','Phrasé','note dans l\'Accord 1','note dans l\'Accord 2','note dans l\'Accord 3','note dans l\'Accord 4','note dans l\'Accord 5','note dans l\'Accord 6','note dans l\'Accord 7','note dans l\'Accord 8','note dans l\'Accord 9','note dans l\'Accord 10','note dans l\'Accord 11','note dans l\'Accord 12','Tempo min','Tempo max','Variation de Tempo','priorité (de 0 à 100)']
+	colonnes_filtres=['nom du filtre','Durée mini (sec)','Durée maxi (sec)','Motcle 1','Motcle 2','Motcle 3','Motcle 4','Motcle 5','Motcle 6','Motcle 7','Motcle 8','Motcle 9','Motcle 10','Motcle 11','Motcle 12','Motcle 13','Motcle 14','Motcle 15','Motcle 16','Motcle 17','Motcle 18','Nuance 1','Nuance 2','Nuance 3','Nuance 4','Nuance 5','Nuance 6','Nuance 7','Attaque 1','Attaque 2','Attaque 3','Relâchement 1','Relâchement 2','Relâchement 3','Note Fondamental 1','Note Fondamental 2','Note Fondamental 3','Note Fondamental 4','Note Fondamental 5','Note Fondamental 6','Note Fondamental 7','Note Fondamental 8','Note Fondamental 9','Note Fondamental 10','Note Fondamental 11','Note Fondamental 12','Note Fondamental 13','Phrase Musical?','Phrasé','note dans l\'Accord 1','note dans l\'Accord 2','note dans l\'Accord 3','note dans l\'Accord 4','note dans l\'Accord 5','note dans l\'Accord 6','note dans l\'Accord 7','note dans l\'Accord 8','note dans l\'Accord 9','note dans l\'Accord 10','note dans l\'Accord 11','note dans l\'Accord 12','Tempo min','Tempo max','Variation de Tempo','priorité (de 0 à 100)']
 
 	# filtrage suivant la durée
 	liste_sons_2= filtre_duree(liste_sons_1,float(filtre['Durée mini (sec)']),float(filtre['Durée maxi (sec)']))
@@ -212,11 +211,11 @@ def filtrage(liste_sons_1,filtre):
 			#print(key) # pour debug
 			#print(filtre[key]) # pour debug
 			if(j%2==1):
-				liste_sons_2 = filtre_relachement(liste_sons_1, filtre[key])
-				#sortie="sortie = liste_sons_2" # pour debug
+				liste_sons_2 = filtre_noteF(liste_sons_1, filtre[key])
+				sortie="sortie = liste_sons_2" # pour debug
 			else:
-				liste_sons_1 = filtre_relachement(liste_sons_2, filtre[key])
-				#sortie="sortie = liste_sons_1" # pour debug
+				liste_sons_1 = filtre_noteF(liste_sons_2, filtre[key])
+				sortie="sortie = liste_sons_1" # pour debug
 			j+=1
 			#print(j) # pour debug
 	#print(sortie)
@@ -229,7 +228,7 @@ def filtrage(liste_sons_1,filtre):
 	
 	
 	# Filtrage suivant le phrasé musical 
-	if filtre['Phrase Musical ?']=="True":
+	if filtre['Phrase Musical?']=="True":
 		liste_sons_2= filtre_phraseMus(liste_sons_1)
 		liste_sons_1= filtre_phrase(liste_sons_2,filtre['Phrasé'])
 		liste_sons_2=liste_sons_1
@@ -316,3 +315,30 @@ def test_filtres(inventaire_sons,inventaire_filtres):
 
 	print("\n \n liste des sons ayant un tempo minimum de 100 fixe :")
 	print([element['nom du son'] for element in filtre_tempo(filtre_variTempo(inventaire_sons,"fixe"),100,99999)])
+
+
+
+if __name__ == "__main__":
+	chemin_csv = "fichiers_csv/" #pour pouvoir trouver le chemin des fichiers
+	instrum = "instrum1"
+	# import csv des sons
+	colonnes_sons=['nom du son','Durée (sec)','Motcle 1','Motcle 2','Motcle 3','Motcle 4','Motcle 5','Motcle 6','Motcle 7','Motcle 8','Motcle 9','Motcle 10','Motcle 11','Motcle 12','Motcle 13','Motcle 14','Motcle 15','Motcle 16','Motcle 17','Motcle 18','Nuance 1','Nuance 2','Nuance 3','Nuance 4','Nuance 5','Nuance 6','Nuance 7','Attaque 1','Attaque 2','Attaque 3','Relâchement 1','Relâchement 2','Relâchement 3','Note Fondamental 1','Note Fondamental 2','Note Fondamental 3','Note Fondamental 4','Note Fondamental 5','Note Fondamental 6','Note Fondamental 7','Note Fondamental 8','Note Fondamental 9','Note Fondamental 10','Note Fondamental 11','Note Fondamental 12','Note Fondamental 13','Phrase Musical?','Phrasé','note dans l\'Accord 1','note dans l\'Accord 2','note dans l\'Accord 3','note dans l\'Accord 4','note dans l\'Accord 5','note dans l\'Accord 6','note dans l\'Accord 7','note dans l\'Accord 8','note dans l\'Accord 9','note dans l\'Accord 10','note dans l\'Accord 11','note dans l\'Accord 12','Tempo','Variation de Tempo','priorité (de 0 à 100)']
+	inventaire_sons = Scadong_utils.import_csv(chemin_csv+instrum+"_"+"id_son.csv", colonnes_sons) #import csv des sons
+	#print(inventaire_sons) # pour debug
+	print("import csv des sons OK")
+	colonnes_filtres=['nom du filtre','Durée mini (sec)','Durée maxi (sec)','Motcle 1','Motcle 2','Motcle 3','Motcle 4','Motcle 5','Motcle 6','Motcle 7','Motcle 8','Motcle 9','Motcle 10','Motcle 11','Motcle 12','Motcle 13','Motcle 14','Motcle 15','Motcle 16','Motcle 17','Motcle 18','Nuance 1','Nuance 2','Nuance 3','Nuance 4','Nuance 5','Nuance 6','Nuance 7','Attaque 1','Attaque 2','Attaque 3','Relâchement 1','Relâchement 2','Relâchement 3','Note Fondamental 1','Note Fondamental 2','Note Fondamental 3','Note Fondamental 4','Note Fondamental 5','Note Fondamental 6','Note Fondamental 7','Note Fondamental 8','Note Fondamental 9','Note Fondamental 10','Note Fondamental 11','Note Fondamental 12','Note Fondamental 13','Phrase Musical?','Phrasé','note dans l\'Accord 1','note dans l\'Accord 2','note dans l\'Accord 3','note dans l\'Accord 4','note dans l\'Accord 5','note dans l\'Accord 6','note dans l\'Accord 7','note dans l\'Accord 8','note dans l\'Accord 9','note dans l\'Accord 10','note dans l\'Accord 11','note dans l\'Accord 12','Tempo min','Tempo max','Variation de Tempo','priorité (de 0 à 100)']
+	inventaire_filtres = Scadong_utils.import_csv(chemin_csv+instrum+"_"+"filtre.csv", colonnes_filtres) #import csv des filtres
+	#print(inventaire_filtres) # pour debug
+	print("import csv des filtres OK")
+		
+	colonnes_recettes=['nom de recette','filtre','séquence','départ séquence','type de lecture','nbre de canal de lecture max','départ vers effet A','départ vers effet B','départ vers effet C','départ vers effet D','départ vers effet E','départ vers effet F','départ vers effet G','départ vers effet H']
+	inventaire_recettes = Scadong_utils.import_csv(chemin_csv+instrum+"_"+"recette.csv", colonnes_recettes) #import csv des recettes
+	#print(inventaire_recettes) # pour debug
+	print("import csv des recettes OK")
+	
+	colonnes_sequences=['nom séquence','taille du pas','longueur séquence','nombre de boucle séquence(-1 = inf)','trig','temps du trig (en pas)','volume (vélocité)','filtre','chance de jeu (entre 0 et 100)','départ vers effet A','départ vers effet B','départ vers effet C','départ vers effet D','départ vers effet E','départ vers effet F','départ vers effet G','départ vers effet H']
+	inventaire_sequences = Scadong_utils.import_csv(chemin_csv+instrum+"_"+"sequence.csv", colonnes_sequences) #import csv des sequences
+	print("import csv des séquences OK")
+
+	test_filtres(inventaire_sons,inventaire_filtres) #pour debug
+
