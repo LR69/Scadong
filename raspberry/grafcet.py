@@ -11,8 +11,9 @@ version 9 : prise en compte de la possibilité de faire jouer plusieurs grafcets
 import time
 import os
 import Scadong_utils
-import PiEye
+#import PiEye
 import RPi.GPIO as IO  #calling for header file which helps in using GPIOs of PI
+
 
 # déclaration de constantes (adressages E/S)
 
@@ -115,6 +116,10 @@ class Grafcet:
 					condition = condition1 and condition2
 				elif element['operateur']=="or":
 					condition = condition1 or condition2
+				elif element['operateur']=="and_not":
+					condition = condition1 and not condition2
+				elif element['operateur']=="or_not":
+					condition = condition1 or not condition2
 				else:
 					raise EtapeError("Le format de l'opérateur {} n'est pas correct".format(element['operateur']))
 			elif element['condition1']!="nc":
@@ -139,7 +144,7 @@ class Grafcet:
 					tempo_txt = '0.0'
 				try:
 					tempo = float(tempo_txt)
-					tempo = tempo / 1000
+					tempo = tempo / 1000 # passage de millisecondes à tempo
 					#print("temporisation à l'étape {}:{} s".format(self.etape,tempo))#pour débug
 				except ValueError:
 					print("Erreur de saisie de la temporisation de {}s dans la transition de {} à {}".format(tempo_txt, etape_prec, etape_suiv))
@@ -271,7 +276,7 @@ def AcquisitionETOR(entrees):
 # test grafcet "instrumentiste" en python
 if __name__ == "__main__":
 	# initialisation de la caméra
-	Oeil=PiEye.PiEye() # initialisation de la caméra
+	#Oeil=PiEye.PiEye() # initialisation de la caméra
 	# première acquisition des entrées
 	mot_IO = 0
 	mot_IO = AcquisitionETOR(mot_IO)
@@ -299,7 +304,8 @@ if __name__ == "__main__":
 	#cycle automate
 	while True:
 		# acquistion caméra
-		mouvement = Oeil.voir()
+		#mouvement = Oeil.voir()
+		mouvement = 0
 		# acquisition entrées TOR
 		mot_IO = AcquisitionETOR(mot_IO)
 		# scrutation des grafcets
